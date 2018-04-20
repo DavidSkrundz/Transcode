@@ -74,7 +74,10 @@ namespace Transcode.View {
 			using (var handbrake = Process.Start(startInfo)) {
 				var shouldAdd = false;
 				while (!handbrake.StandardError.EndOfStream) {
-					var line = handbrake.StandardError.ReadLine();
+					string line = null;
+					try {
+						line = handbrake.StandardError.ReadLine();
+					} catch { return; }
 					if (line.Length == 0) { continue; }
 					if (line[0] == ' ' && shouldAdd) {
 						this.Presets.Add(line.Trim(' '));
@@ -139,8 +142,15 @@ namespace Transcode.View {
 		private void DeleteButtonClicked(object sender, RoutedEventArgs eventArgs) {
 			var button = sender as Button;
 			var item = button.DataContext as Item;
-			// TODO: Stop handbrake if its running on this item
 			this.Items.Remove(item);
+
+			if (item.Status == ItemStatus.Running) {
+				this.IsRunning = false;
+				this.process.Kill();
+				this.process = null;
+				this.progress = "";
+				this.StartHandbrake();
+			}
 		}
 
 		private void RetryButtonClicked(object sender, RoutedEventArgs eventArgs) {
@@ -152,7 +162,10 @@ namespace Transcode.View {
 		private bool ProcessFolder(string inputRelativePath, string inputBasePath, string outputBasePath) {
 			var outputRelativePath = inputRelativePath;
 			var outputNumber = 0;
-			var files = Directory.EnumerateFileSystemEntries(Path.Combine(inputBasePath, inputRelativePath)).OrderBy(filename => filename);
+			IEnumerable<string> files = null;
+			try {
+				files = Directory.EnumerateFileSystemEntries(Path.Combine(inputBasePath, inputRelativePath)).OrderBy(filename => filename);
+			} catch { return true; }
 			foreach (var file in files) {
 				if (Directory.Exists(file)) {
 					var filePath = PathExtension.GetRelativePath(inputBasePath, file);
@@ -232,7 +245,12 @@ namespace Transcode.View {
 			if (item == null) { throw new ApplicationException("Item is null"); }
 			if (item.Status != ItemStatus.Pending) { throw new ApplicationException("Item should be pending"); }
 
-			Directory.CreateDirectory(Path.GetDirectoryName(item.OutputPath));
+			try {
+				Directory.CreateDirectory(Path.GetDirectoryName(item.OutputPath));
+			} catch {
+				item.Status = ItemStatus.Error;
+				return;
+			}
 
 			this.process = new Process {
 				StartInfo = new ProcessStartInfo() {
@@ -272,9 +290,7 @@ namespace Transcode.View {
 
 		// Boiler-plate for INotifyPropertyChanged
 		private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null) {
-			if (EqualityComparer<T>.Default.Equals(field, value)) {
-				return false;
-			}
+			if (EqualityComparer<T>.Default.Equals(field, value)) { return false; }
 			field = value;
 			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 			return true;

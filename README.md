@@ -12,3 +12,5 @@ Requires [HandbrakeCLI](https://handbrake.fr/downloads2.php)
 - Reorder queue
 - Edit item
 - Store the preset in the items
+- Have a sub and no-sub preset and use the no-sub if VODSUB or mp4 incompatible subs are detected
+- Logging errors and have some sort of console
