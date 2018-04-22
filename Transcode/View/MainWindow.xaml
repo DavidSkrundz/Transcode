@@ -54,36 +54,51 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			<StackPanel Grid.Row="0" Orientation="Horizontal">
-				<Button Name="StartButton" Margin="5" Click="StartStopButtonClicked">
-					<Button.Template>
-						<ControlTemplate>
-							<Image VerticalAlignment="Center" SnapsToDevicePixels="True">
-								<Image.Style>
-									<Style TargetType="{x:Type Image}">
-										<Style.Triggers>
-											<DataTrigger Binding="{Binding IsRunning, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Value="False">
-												<Setter Property="Source" Value="/Images/Start.png"/>
-											</DataTrigger>
-											<DataTrigger Binding="{Binding IsRunning, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Value="True">
-												<Setter Property="Source" Value="/Images/Pause.png"/>
-											</DataTrigger>
-										</Style.Triggers>
-									</Style>
-								</Image.Style>
-							</Image>
-						</ControlTemplate>
-					</Button.Template>
-				</Button>
-				<Button Name="OpenButton" Margin="5" Click="OpenButtonClicked">
-					<Button.Template>
-						<ControlTemplate>
-							<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Open.png"/>
-						</ControlTemplate>
-					</Button.Template>
-				</Button>
-				<Label Content="{Binding Progress, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Margin="5,7,5,3" Padding="0"/>
-			</StackPanel>
+			<Grid Grid.Row="0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<StackPanel Grid.Column="0" Orientation="Horizontal">
+					<Button Name="StartButton" Margin="5" Click="StartStopButtonClicked">
+						<Button.Template>
+							<ControlTemplate>
+								<Image VerticalAlignment="Center" SnapsToDevicePixels="True">
+									<Image.Style>
+										<Style TargetType="{x:Type Image}">
+											<Style.Triggers>
+												<DataTrigger Binding="{Binding IsRunning, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Value="False">
+													<Setter Property="Source" Value="/Images/Start.png"/>
+												</DataTrigger>
+												<DataTrigger Binding="{Binding IsRunning, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Value="True">
+													<Setter Property="Source" Value="/Images/Pause.png"/>
+												</DataTrigger>
+											</Style.Triggers>
+										</Style>
+									</Image.Style>
+								</Image>
+							</ControlTemplate>
+						</Button.Template>
+					</Button>
+					<Button Name="OpenButton" Margin="5" Click="OpenButtonClicked">
+						<Button.Template>
+							<ControlTemplate>
+								<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Open.png"/>
+							</ControlTemplate>
+						</Button.Template>
+					</Button>
+					<Label Content="{Binding Progress, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Margin="5,7,5,3" Padding="0"/>
+				</StackPanel>
+				<StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+					<Button Name="SettingsButton" Margin="5" Click="SettingsButtonClicked">
+						<Button.Template>
+							<ControlTemplate>
+								<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Settings.png"/>
+							</ControlTemplate>
+						</Button.Template>
+					</Button>
+				</StackPanel>
+			</Grid>
 			<ListView Grid.Row="1" HorizontalContentAlignment="Stretch" Margin="5,0,5,5" ItemsSource="{Binding Items, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
 				<ListView.ItemTemplate>
 					<DataTemplate>

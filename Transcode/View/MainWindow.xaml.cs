@@ -43,9 +43,16 @@ namespace Transcode.View {
 		private ObservableCollection<Item> items = new ObservableCollection<Item>();
 		private ObservableCollection<string> presets = new ObservableCollection<string>();
 		private string progress = "";
-		
+
+		private TranscodeSettings settings = new TranscodeSettings();
+
 		public MainWindow() {
 			InitializeComponent();
+		}
+		
+		private void SettingsButtonClicked(object sender, RoutedEventArgs eventArgs) {
+			var settingsWindow = new SettingsWindow(this.settings) { Owner = this };
+			settingsWindow.ShowDialog();
 		}
 
 		private void FindHandbrakeButtonClicked(object sender, RoutedEventArgs eventArgs) {

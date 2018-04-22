@@ -1,0 +1,61 @@
+﻿<Window x:Class="Transcode.View.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="SettingsWindow"
+        ResizeMode="NoResize"
+        Height="200" Width="500"
+        WindowStartupLocation="CenterOwner">
+	<Window.Resources>
+		<Style TargetType="Label">
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="Margin" Value="5,7,5,3"/>
+		</Style>
+		<Style TargetType="Button">
+			<Setter Property="Margin" Value="5"/>
+		</Style>
+		<Style TargetType="TextBox">
+			<Setter Property="Margin" Value="5"/>
+		</Style>
+	</Window.Resources>
+	<Grid>
+		<Grid Grid.Row="0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="20"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			
+			<Label Grid.Row="0" Grid.Column="0" Content="HandbrakeCLI.exe"/>
+			<TextBox Grid.Row="0" Grid.Column="1"/>
+			<Button Grid.Row="0" Grid.Column="2" Width="50" Content="Browse"/>
+			
+			<Label Grid.Row="1" Grid.Column="0" Content="Handbrake Preset"/>
+			<ComboBox Grid.Row="1" Grid.Column="1" Margin="5"/>
+			<Button Grid.Row="1" Grid.Column="2">
+				<Button.Template>
+					<ControlTemplate>
+						<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Retry.png"/>
+					</ControlTemplate>
+				</Button.Template>
+			</Button>
+			
+			<Label Grid.Row="3" Grid.Column="0" Content="Input Root"/>
+			<TextBox Grid.Row="3" Grid.Column="1"/>
+			<Button Grid.Row="3" Grid.Column="2" Width="50" Content="Browse"/>
+			
+			<Label Grid.Row="4" Grid.Column="0" Content="Output Root"/>
+			<TextBox Grid.Row="4" Grid.Column="1"/>
+			<Button Grid.Row="4" Grid.Column="2" Width="50" Content="Browse"/>
+		</Grid>
+	</Grid>
+</Window>
