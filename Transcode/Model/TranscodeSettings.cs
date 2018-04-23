@@ -33,8 +33,8 @@ namespace Transcode.Model {
 		}
 
 		private string handbrakePath = "";
-		private string inputRootPath = null;
-		private string outputRootPath = null;
+		private string inputRootPath = "";
+		private string outputRootPath = "";
 
 		// Boiler-plate for INotifyPropertyChanged
 		private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null) {
