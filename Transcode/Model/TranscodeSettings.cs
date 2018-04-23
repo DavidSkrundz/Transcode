@@ -11,7 +11,7 @@ namespace Transcode.Model {
 		public string HandbrakePath {
 			get => this.handbrakePath;
 			set {
-				if (value == null) { throw new ApplicationException("set TranscodeSettings.HandbrakeLocation: value is null"); }
+				if (value != null && !Path.IsPathRooted(value)) { throw new ApplicationException("set TranscodeSettings.HandbrakeLocation: value not a rooted path"); }
 				this.SetField(ref this.handbrakePath, value);
 			}
 		}
