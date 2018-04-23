@@ -12,6 +12,7 @@ namespace Transcode {
 					app.Run();
 				} catch (Exception e) {
 					file.WriteLine(e.ToString());
+					file.Flush();
 				}
 			}
 		}

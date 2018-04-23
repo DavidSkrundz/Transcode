@@ -13,6 +13,7 @@ namespace Transcode.View {
 			InitializeComponent();
 
 			this.settings = settings ?? throw new ApplicationException("new SettingsWindow(): settings is null");
+			this.DataContext = this.settings;
 		}
 	}
 }

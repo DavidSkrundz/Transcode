@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="SettingsWindow"
         ResizeMode="NoResize"
-        Height="200" Width="500"
+        Height="150" Width="500"
         WindowStartupLocation="CenterOwner">
 	<Window.Resources>
 		<Style TargetType="Label">
@@ -18,14 +18,14 @@
 		</Style>
 		<Style TargetType="TextBox">
 			<Setter Property="Margin" Value="5"/>
+			<Setter Property="IsEnabled" Value="False"/>
 		</Style>
 	</Window.Resources>
 	<Grid>
 		<Grid Grid.Row="0">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="20"/>
+				<RowDefinition Height="15"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
@@ -36,26 +36,16 @@
 			</Grid.ColumnDefinitions>
 			
 			<Label Grid.Row="0" Grid.Column="0" Content="HandbrakeCLI.exe"/>
-			<TextBox Grid.Row="0" Grid.Column="1"/>
+			<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding HandbrakePath}"/>
 			<Button Grid.Row="0" Grid.Column="2" Width="50" Content="Browse"/>
+
+			<Label Grid.Row="2" Grid.Column="0" Content="Input Root"/>
+			<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding InputRootPath}"/>
+			<Button Grid.Row="2" Grid.Column="2" Width="50" Content="Browse"/>
 			
-			<Label Grid.Row="1" Grid.Column="0" Content="Handbrake Preset"/>
-			<ComboBox Grid.Row="1" Grid.Column="1" Margin="5"/>
-			<Button Grid.Row="1" Grid.Column="2">
-				<Button.Template>
-					<ControlTemplate>
-						<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Retry.png"/>
-					</ControlTemplate>
-				</Button.Template>
-			</Button>
-			
-			<Label Grid.Row="3" Grid.Column="0" Content="Input Root"/>
-			<TextBox Grid.Row="3" Grid.Column="1"/>
+			<Label Grid.Row="3" Grid.Column="0" Content="Output Root"/>
+			<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OutputRootPath}"/>
 			<Button Grid.Row="3" Grid.Column="2" Width="50" Content="Browse"/>
-			
-			<Label Grid.Row="4" Grid.Column="0" Content="Output Root"/>
-			<TextBox Grid.Row="4" Grid.Column="1"/>
-			<Button Grid.Row="4" Grid.Column="2" Width="50" Content="Browse"/>
 		</Grid>
 	</Grid>
 </Window>
