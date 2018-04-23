@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
@@ -55,23 +54,12 @@ namespace Transcode.View {
 			settingsWindow.ShowDialog();
 		}
 
-		private void FindHandbrakeButtonClicked(object sender, RoutedEventArgs eventArgs) {
-			if (sender != this.HandbrakeButton) { throw new ApplicationException("Invalid Button"); }
-			var dialog = new OpenFileDialog() {
-				Filter = "Executable|*.exe"
-			};
-			if (dialog.ShowDialog() == true) {
-				this.HandbrakeTextBox.Text = dialog.FileName;
-				this.ReloadPresetsClicked(this.ReloadPresetsButton, null);
-			}
-		}
-
 		private void ReloadPresetsClicked(object sender, RoutedEventArgs eventArgs) {
 			if (sender != this.ReloadPresetsButton) { throw new ApplicationException("Invalid Button"); }
 			this.Presets.Clear();
-			if (this.HandbrakeTextBox.Text.Length == 0) { return; }
+			if (this.settings.HandbrakePath.Length == 0) { return; }
 			var startInfo = new ProcessStartInfo() {
-				FileName = this.HandbrakeTextBox.Text,
+				FileName = this.settings.HandbrakePath,
 				Arguments = "--preset-import-gui --preset-list",
 				UseShellExecute = false,
 				RedirectStandardOutput = true,
@@ -95,53 +83,36 @@ namespace Transcode.View {
 			}
 		}
 
-		private void BrowseButtonClicked(object sender, RoutedEventArgs eventArgs) {
-			if (sender != this.InputRootButton && sender != this.OutputRootButton) { throw new ApplicationException("Invalid Button"); }
-			using (var dialog = new CommonOpenFileDialog()) {
-				dialog.IsFolderPicker = true;
-				dialog.EnsurePathExists = true;
-
-				var result = dialog.ShowDialog();
-				if (result == CommonFileDialogResult.Ok) {
-					if (sender == this.InputRootButton) {
-						this.InputRootTextBox.Text = dialog.FileName;
-					} else if (sender == this.OutputRootButton) {
-						this.OutputRootTextBox.Text = dialog.FileName;
-					}
-				}
-			}
-		}
-
 		private void OpenButtonClicked(object sender, RoutedEventArgs eventArgs) {
 			if (sender != this.OpenButton) { throw new ApplicationException("Invalid Button"); }
 			if (this.PresetComboBox.SelectedIndex < 0) {
 				// TODO: Show something about no preset selected
 				return;
 			}
-			if (this.InputRootTextBox.Text == "") {
-				// TODO: Show something about path being empty
+			if (this.settings.InputRootPath == "") {
+				// TODO: Show something about editing settings
 				return;
 			}
-			if (this.OutputRootTextBox.Text == "") {
-				// TODO: Show something about path being empty
+			if (this.settings.OutputRootPath == "") {
+				// TODO: Show something about editing settings
 				return;
 			}
 			using (var dialog = new CommonOpenFileDialog()) {
 				dialog.IsFolderPicker = true;
 				dialog.RestoreDirectory = false;
-				dialog.InitialDirectory = this.InputRootTextBox.Text;
+				dialog.InitialDirectory = this.settings.InputRootPath;
 				dialog.EnsurePathExists = true;
 
 				var result = dialog.ShowDialog();
 				if (result == CommonFileDialogResult.Ok) {
 					string path;
 					try {
-						path = PathExtension.GetRelativePath(this.InputRootTextBox.Text, dialog.FileName);
+						path = PathExtension.GetRelativePath(this.settings.InputRootPath, dialog.FileName);
 					} catch (ApplicationException e) {
 						MessageBox.Show(e.Message);
 						return;
 					}
-					this.ProcessFolder(path, this.InputRootTextBox.Text, this.OutputRootTextBox.Text);
+					this.ProcessFolder(path, this.settings.InputRootPath, this.settings.OutputRootPath);
 				}
 			}
 		}
@@ -261,7 +232,7 @@ namespace Transcode.View {
 
 			this.process = new Process {
 				StartInfo = new ProcessStartInfo() {
-					FileName = this.HandbrakeTextBox.Text,
+					FileName = this.settings.HandbrakePath,
 					Arguments = string.Format("--preset-import-gui --preset \"{0}\" --input \"{1}\" --output \"{2}\"", this.Presets[this.PresetComboBox.SelectedIndex], item.InputPath, item.OutputPath),
 					UseShellExecute = false,
 					RedirectStandardOutput = true,

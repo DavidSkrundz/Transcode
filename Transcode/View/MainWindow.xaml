@@ -1,14 +1,14 @@
 ﻿<Window x:Class="Transcode.View.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Transcode.Model"
-        mc:Ignorable="d"
-        Title="Transcode"
-        Height="400" Width="800"
-        MinHeight="300" MinWidth="500"
-        WindowStartupLocation="CenterScreen">
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:Transcode.Model"
+		mc:Ignorable="d"
+		Title="Transcode"
+		Height="400" Width="800"
+		MinHeight="300" MinWidth="500"
+		WindowStartupLocation="CenterScreen">
 	<Window.Resources>
 		<local:BoolVisibilityConverter x:Key="boolVisibilityConverter" />
 		<local:ItemStatusConverter x:Key="itemStatusConverter"/>
@@ -21,33 +21,21 @@
 		<Grid Grid.Row="0">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
-			<Label Content="HandbrakeCLI" Grid.Row="0" Grid.Column="0" Margin="5,7,5,3" Padding="0"/>
-			<Label Content="Handbrake Preset" Grid.Row="1" Grid.Column="0" Margin="5,7,5,3" Padding="0"/>
-			<Label Content="Input Root" Grid.Row="2" Grid.Column="0" Margin="5,7,5,3" Padding="0"/>
-			<Label Content="Output Root" Grid.Row="3" Grid.Column="0" Margin="5,7,5,3" Padding="0"/>
-			<TextBox Name="HandbrakeTextBox" Grid.Row="0" Grid.Column="1" Margin="5" IsEnabled="False"/>
-			<ComboBox Name="PresetComboBox" Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding Presets, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
-			<TextBox Name="InputRootTextBox" Grid.Row="2" Grid.Column="1" Margin="5" IsEnabled="False"/>
-			<TextBox Name="OutputRootTextBox" Grid.Row="3" Grid.Column="1" Margin="5" IsEnabled="False"/>
-			<Button Name="HandbrakeButton" Content="Browse" Grid.Row="0" Grid.Column="2" Width="50" Margin="5" Click="FindHandbrakeButtonClicked"/>
-			<Button Name="ReloadPresetsButton" Grid.Row="1" Grid.Column="2" Margin="5" Click="ReloadPresetsClicked">
+			<Label Content="Handbrake Preset" Grid.Row="0" Grid.Column="0" Margin="5,7,5,3" Padding="0"/>
+			<ComboBox Name="PresetComboBox" Grid.Row="0" Grid.Column="1" Margin="5" ItemsSource="{Binding Presets, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+			<Button Name="ReloadPresetsButton" Grid.Row="0" Grid.Column="2" Margin="5" Click="ReloadPresetsClicked">
 				<Button.Template>
 					<ControlTemplate>
 						<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Retry.png"/>
 					</ControlTemplate>
 				</Button.Template>
 			</Button>
-			<Button Name="InputRootButton" Content="Browse" Grid.Row="2" Grid.Column="2" Width="50" Margin="5" Click="BrowseButtonClicked"/>
-			<Button Name="OutputRootButton" Content="Browse" Grid.Row="3" Grid.Column="2" Width="50" Margin="5" Click="BrowseButtonClicked"/>
 		</Grid>
 		<Grid Grid.Row="1">
 			<Grid.RowDefinitions>
