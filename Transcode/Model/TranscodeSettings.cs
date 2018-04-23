@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Transcode.Exceptions;
 
 namespace Transcode.Model {
 	public class TranscodeSettings : INotifyPropertyChanged {
@@ -11,24 +12,30 @@ namespace Transcode.Model {
 		public string HandbrakePath {
 			get => this.handbrakePath;
 			set {
-				if (value != null && !Path.IsPathRooted(value)) { throw new ApplicationException("set TranscodeSettings.HandbrakeLocation: value not a rooted path"); }
-				this.SetField(ref this.handbrakePath, value);
+				try {
+					if (value != null && !Path.IsPathRooted(value)) { throw new BindingException("Path is not absolute"); }
+					this.SetField(ref this.handbrakePath, value);
+				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
 		}
 
 		public string InputRootPath {
 			get => this.inputRootPath;
 			set {
-				if (value != null && !Path.IsPathRooted(value)) { throw new ApplicationException("set TranscodeSettings.InputRootPath: value not a rooted path"); }
-				this.SetField(ref this.inputRootPath, value);
+				try {
+					if (value != null && !Path.IsPathRooted(value)) { throw new BindingException("Path is not absolute"); }
+					this.SetField(ref this.inputRootPath, value);
+				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
 		}
 
 		public string OutputRootPath {
 			get => this.outputRootPath;
 			set {
-				if (value != null && !Path.IsPathRooted(value)) { throw new ApplicationException("set TranscodeSettings.OutputRootPath: value not a rooted path"); }
-				this.SetField(ref this.outputRootPath, value);
+				try {
+					if (value != null && !Path.IsPathRooted(value)) { throw new BindingException("Path is not absolute"); }
+					this.SetField(ref this.outputRootPath, value);
+				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
 		}
 
