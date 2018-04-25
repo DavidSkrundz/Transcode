@@ -1,67 +1,54 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Windows;
-using Transcode.Extensions;
+using System.Windows.Controls;
 using Transcode.Model;
 
 namespace Transcode.View {
+	public enum NewItemWindowResult {
+		Ok,
+		SkipFile,
+		SkipFolder,
+		SkipAll,
+	}
+
 	/// <summary>
 	/// Interaction logic for NewItemWindow.xaml
 	/// </summary>
 	public partial class NewItemWindow : Window {
-		public NewItemRequest Request { get; set; }
-		public NewItemResponse Response { get; } = new NewItemResponse();
+		private Item item;
+		private NewItemWindowResult result = NewItemWindowResult.SkipFile;
 
-		private static Regex DigitRegex = new Regex("^[0-9]+$");
-
-		public NewItemWindow() {
+		public NewItemWindow(Item item) {
 			InitializeComponent();
 
-			this.Loaded += delegate {
-				if (this.Request == null) { throw new ApplicationException("A Request must be set."); }
-				this.InputPathLabel.Content = this.Request.InputPath;
-				this.InputNameLabel.Content = this.Request.InputName;
-				this.OutputPathField.Text = this.Request.OutputPath;
-				this.OutputNumberField.Text = this.Request.OutputNumber.ToString();
-			};
+			this.item = item ?? throw new ApplicationException("new NewItemWindow(): item is null");
+			this.DataContext = this.item;
+		}
+
+		public new NewItemWindowResult ShowDialog() {
+			base.ShowDialog();
+			return this.result;
 		}
 
 		private void ActionComboBoxSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs eventArgs) {
-			if (sender != this.ActionComboBox) { throw new ApplicationException("Invalid ComboBox"); }
-			if (this.ActionComboBox.SelectedItem == this.AlternateActionItem) {
+			var comboBox = (ComboBox)sender;
+			if (comboBox.SelectedItem == this.AlternateActionItem) {
 				// Do nothing
-			} else if (this.ActionComboBox.SelectedItem == this.SkipFileItem) {
-				this.Response.SkipFile = true;
+			} else if (comboBox.SelectedItem == this.SkipFileItem) {
+				this.result = NewItemWindowResult.SkipFile;
 				this.Close();
-			} else if (this.ActionComboBox.SelectedItem == this.SkipFolderItem) {
-				this.Response.SkipFolder = true;
+			} else if (comboBox.SelectedItem == this.SkipFolderItem) {
+				this.result = NewItemWindowResult.SkipFolder;
 				this.Close();
-			} else if (this.ActionComboBox.SelectedItem == this.SkipAllItem) {
-				this.Response.SkipAll = true;
+			} else if (comboBox.SelectedItem == this.SkipAllItem) {
+				this.result = NewItemWindowResult.SkipAll;
 				this.Close();
 			} else { throw new ApplicationException("Invalid ComboBox Item"); }
 		}
 
-		private void ButtonClicked(object sender, RoutedEventArgs eventArgs) {
-			if (sender != this.AddButton) { throw new ApplicationException("Invalid Button"); }
-			if (this.OutputPathField.Text == "") {
-				// TODO: Show something about path being empty
-			} else if (!PathExtension.IsValidPathName(this.OutputPathField.Text)) {
-				// TODO: Show something about path being invalid
-			} else if (this.OutputNameField.Text == "") {
-				// TODO: Show something about name being empty
-			} else if (!PathExtension.IsValidFileName(this.OutputNameField.Text)) {
-				// TODO: Show something about name being invalid
-			} else if (this.OutputNumberField.Text.Length != 0 && !DigitRegex.IsMatch(this.OutputNumberField.Text)) {
-				// TODO: Show something about number being invalid
-			} else {
-				this.Response.Path = this.OutputPathField.Text;
-				if (this.OutputNumberField.Text.Length > 0) {
-					this.Response.Number = int.Parse(this.OutputNumberField.Text);
-				}
-				this.Response.Name = this.OutputNameField.Text;
-				this.Close();
-			}
+		private void AddButtonClicked(object sender, RoutedEventArgs eventArgs) {
+			this.result = NewItemWindowResult.Ok;
+			this.Close();
 		}
 	}
 }

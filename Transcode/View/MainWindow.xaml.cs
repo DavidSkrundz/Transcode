@@ -8,7 +8,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Transcode.Extensions;
 using Transcode.Model;
@@ -150,27 +149,23 @@ namespace Transcode.View {
 					if (!ProcessFolder(filePath, inputBasePath, outputBasePath)) { return false; }
 				} else if (File.Exists(file)) {
 					var inputFileName = Path.GetFileName(file);
-					var newItemPopup = new NewItemWindow() {
-						Request = new NewItemRequest() {
-							InputPath = inputRelativePath,
-							InputName = inputFileName,
-							OutputPath = outputRelativePath,
-							OutputNumber = outputNumber + 1,
-						}
+					var newItem = new Item() {
+						InputBasePath = inputBasePath,
+						InputRelativePath = inputRelativePath,
+						InputFileName = Path.GetFileName(inputFileName),
+						InputFileExtension = Path.GetExtension(inputFileName),
+						OutputBasePath = outputBasePath,
+						OutputRelativePath = outputRelativePath,
+						OutputFileNumber = (outputNumber + 1).ToString()
 					};
-					newItemPopup.Owner = this;
-					_ = newItemPopup.ShowDialog();
-					var response = newItemPopup.Response;
-					if (response.SkipFile) { continue; }
-					if (response.SkipFolder) { break; }
-					if (response.SkipAll) { return false; }
-					if (!response.IsValid) { continue; }
-					outputRelativePath = response.Path;
-					outputNumber = response.Number;
-					var outputFileName = response.Name;
-					
-					var newItem = new Item(inputBasePath, inputRelativePath, inputFileName, outputBasePath, outputRelativePath, outputNumber, outputFileName);
+					var newItemWindow = new NewItemWindow(newItem) { Owner = this };
+					var response = newItemWindow.ShowDialog();
+					if (response == NewItemWindowResult.SkipFile) { continue; }
+					if (response == NewItemWindowResult.SkipFolder) { break; }
+					if (response == NewItemWindowResult.SkipAll) { return false; }
 					this.Items.Add(newItem);
+					outputRelativePath = newItem.OutputRelativePath;
+					outputNumber = int.Parse(newItem.OutputFileNumber);
 				}
 			}
 			return true;

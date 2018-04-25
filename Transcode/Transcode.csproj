@@ -98,8 +98,6 @@
   <ItemGroup>
     <Compile Include="Model\ItemStatus.cs" />
     <Compile Include="Model\ItemStatusConverter.cs" />
-    <Compile Include="Model\NewItemRequest.cs" />
-    <Compile Include="Model\NewItemResponse.cs" />
     <Compile Include="View\NewItemWindow.xaml.cs">
       <DependentUpon>NewItemWindow.xaml</DependentUpon>
     </Compile>
