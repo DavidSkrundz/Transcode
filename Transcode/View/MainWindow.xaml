@@ -19,154 +19,136 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		<Grid Grid.Row="0">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
-			<Label Content="Handbrake Preset" Grid.Row="0" Grid.Column="0" Margin="5,7,5,3" Padding="0"/>
-			<ComboBox Name="PresetComboBox" Grid.Row="0" Grid.Column="1" Margin="5" ItemsSource="{Binding Presets, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
-			<Button Name="ReloadPresetsButton" Grid.Row="0" Grid.Column="2" Margin="5" Click="ReloadPresetsClicked">
-				<Button.Template>
-					<ControlTemplate>
-						<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Retry.png"/>
-					</ControlTemplate>
-				</Button.Template>
-			</Button>
+			<StackPanel Grid.Column="0" Orientation="Horizontal">
+				<Button Name="StartButton" Margin="5" Click="StartStopButtonClicked">
+					<Button.Template>
+						<ControlTemplate>
+							<Image VerticalAlignment="Center" SnapsToDevicePixels="True">
+								<Image.Style>
+									<Style TargetType="{x:Type Image}">
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding IsRunning, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Value="False">
+												<Setter Property="Source" Value="/Images/Start.png"/>
+											</DataTrigger>
+											<DataTrigger Binding="{Binding IsRunning, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Value="True">
+												<Setter Property="Source" Value="/Images/Pause.png"/>
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</Image.Style>
+							</Image>
+						</ControlTemplate>
+					</Button.Template>
+				</Button>
+				<Button Name="OpenButton" Margin="5" Click="OpenButtonClicked">
+					<Button.Template>
+						<ControlTemplate>
+							<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Open.png"/>
+						</ControlTemplate>
+					</Button.Template>
+				</Button>
+				<Label Content="{Binding Progress, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Margin="5,7,5,3" Padding="0"/>
+			</StackPanel>
+			<StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+				<Button Name="SettingsButton" Margin="5" Click="SettingsButtonClicked">
+					<Button.Template>
+						<ControlTemplate>
+							<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Settings.png"/>
+						</ControlTemplate>
+					</Button.Template>
+				</Button>
+				<Button Name="ReloadPresetsButton" Margin="5" Click="ReloadPresetsClicked">
+					<Button.Template>
+						<ControlTemplate>
+							<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Retry.png"/>
+						</ControlTemplate>
+					</Button.Template>
+				</Button>
+			</StackPanel>
 		</Grid>
-		<Grid Grid.Row="1">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="*"/>
-			</Grid.RowDefinitions>
-			<Grid Grid.Row="0">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="Auto"/>
-				</Grid.ColumnDefinitions>
-				<StackPanel Grid.Column="0" Orientation="Horizontal">
-					<Button Name="StartButton" Margin="5" Click="StartStopButtonClicked">
-						<Button.Template>
-							<ControlTemplate>
-								<Image VerticalAlignment="Center" SnapsToDevicePixels="True">
-									<Image.Style>
-										<Style TargetType="{x:Type Image}">
-											<Style.Triggers>
-												<DataTrigger Binding="{Binding IsRunning, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Value="False">
-													<Setter Property="Source" Value="/Images/Start.png"/>
-												</DataTrigger>
-												<DataTrigger Binding="{Binding IsRunning, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Value="True">
-													<Setter Property="Source" Value="/Images/Pause.png"/>
-												</DataTrigger>
-											</Style.Triggers>
-										</Style>
-									</Image.Style>
-								</Image>
-							</ControlTemplate>
-						</Button.Template>
-					</Button>
-					<Button Name="OpenButton" Margin="5" Click="OpenButtonClicked">
-						<Button.Template>
-							<ControlTemplate>
-								<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Open.png"/>
-							</ControlTemplate>
-						</Button.Template>
-					</Button>
-					<Label Content="{Binding Progress, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Margin="5,7,5,3" Padding="0"/>
-				</StackPanel>
-				<StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
-					<Button Name="SettingsButton" Margin="5" Click="SettingsButtonClicked">
-						<Button.Template>
-							<ControlTemplate>
-								<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Settings.png"/>
-							</ControlTemplate>
-						</Button.Template>
-					</Button>
-				</StackPanel>
-			</Grid>
-			<ListView Grid.Row="1" HorizontalContentAlignment="Stretch" Margin="5,0,5,5" ItemsSource="{Binding Items, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="Auto"/>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="Auto"/>
-							</Grid.ColumnDefinitions>
-							<StackPanel Grid.Column="0" VerticalAlignment="Center">
-								<Image SnapsToDevicePixels="True">
-									<Image.RenderTransform>
-										<RotateTransform CenterX="10" CenterY="10" Angle="0"/>
-									</Image.RenderTransform>
-									<Image.Style>
-										<Style TargetType="{x:Type Image}">
-											<Style.Triggers>
-												<DataTrigger Binding="{Binding Status, Converter={StaticResource itemStatusConverter}}" Value="Pending">
-													<Setter Property="Source" Value="/Images/Empty.png"/>
-												</DataTrigger>
-												<DataTrigger Binding="{Binding Status, Converter={StaticResource itemStatusConverter}}" Value="Error">
-													<Setter Property="Source" Value="/Images/Error.png"/>
-												</DataTrigger>
-												<DataTrigger Binding="{Binding Status, Converter={StaticResource itemStatusConverter}}" Value="Done">
-													<Setter Property="Source" Value="/Images/Success.png"/>
-												</DataTrigger>
-												<DataTrigger Binding="{Binding Status, Converter={StaticResource itemStatusConverter}}" Value="Running">
-													<Setter Property="Source" Value="/Images/Spin.png"/>
-													<DataTrigger.EnterActions>
-														<BeginStoryboard>
-															<Storyboard>
-																<DoubleAnimation Duration="0:0:1" To="180" Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)" RepeatBehavior="Forever"/>
-															</Storyboard>
-														</BeginStoryboard>
-													</DataTrigger.EnterActions>
-													<DataTrigger.ExitActions>
-														<BeginStoryboard>
-															<Storyboard>
-																<DoubleAnimation Duration="0:0:0" To="0" Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"/>
-															</Storyboard>
-														</BeginStoryboard>
-													</DataTrigger.ExitActions>
-												</DataTrigger>
-											</Style.Triggers>
-										</Style>
-									</Image.Style>
-								</Image>
+		<ListView Grid.Row="1" HorizontalContentAlignment="Stretch" Margin="5,0,5,5" ItemsSource="{Binding Items, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<StackPanel Grid.Column="0" VerticalAlignment="Center">
+							<Image SnapsToDevicePixels="True">
+								<Image.RenderTransform>
+									<RotateTransform CenterX="10" CenterY="10" Angle="0"/>
+								</Image.RenderTransform>
+								<Image.Style>
+									<Style TargetType="{x:Type Image}">
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding Status, Converter={StaticResource itemStatusConverter}}" Value="Pending">
+												<Setter Property="Source" Value="/Images/Empty.png"/>
+											</DataTrigger>
+											<DataTrigger Binding="{Binding Status, Converter={StaticResource itemStatusConverter}}" Value="Error">
+												<Setter Property="Source" Value="/Images/Error.png"/>
+											</DataTrigger>
+											<DataTrigger Binding="{Binding Status, Converter={StaticResource itemStatusConverter}}" Value="Done">
+												<Setter Property="Source" Value="/Images/Success.png"/>
+											</DataTrigger>
+											<DataTrigger Binding="{Binding Status, Converter={StaticResource itemStatusConverter}}" Value="Running">
+												<Setter Property="Source" Value="/Images/Spin.png"/>
+												<DataTrigger.EnterActions>
+													<BeginStoryboard>
+														<Storyboard>
+															<DoubleAnimation Duration="0:0:1" To="180" Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)" RepeatBehavior="Forever"/>
+														</Storyboard>
+													</BeginStoryboard>
+												</DataTrigger.EnterActions>
+												<DataTrigger.ExitActions>
+													<BeginStoryboard>
+														<Storyboard>
+															<DoubleAnimation Duration="0:0:0" To="0" Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"/>
+														</Storyboard>
+													</BeginStoryboard>
+												</DataTrigger.ExitActions>
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</Image.Style>
+							</Image>
+						</StackPanel>
+						<StackPanel Grid.Column="1" HorizontalAlignment="Stretch">
+							<StackPanel Orientation="Horizontal">
+								<Label Content="Source: " FontWeight="Bold" Padding="5,0,0,0"/>
+								<Label Content="{Binding InputPath}" Padding="5,0,5,0"/>
 							</StackPanel>
-							<StackPanel Grid.Column="1" HorizontalAlignment="Stretch">
-								<StackPanel Orientation="Horizontal">
-									<Label Content="Source: " FontWeight="Bold" Padding="5,0,0,0"/>
-									<Label Content="{Binding InputPath}" Padding="5,0,5,0"/>
-								</StackPanel>
-								<StackPanel Orientation="Horizontal">
-									<Label Content="Destination: " FontWeight="Bold" Padding="5,0,0,0"/>
-									<Label Content="{Binding OutputPath}" Padding="5,0,5,0"/>
-								</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<Label Content="Destination: " FontWeight="Bold" Padding="5,0,0,0"/>
+								<Label Content="{Binding OutputPath}" Padding="5,0,5,0"/>
 							</StackPanel>
-							<StackPanel Grid.Column="2" VerticalAlignment="Center">
-								<StackPanel Orientation="Horizontal">
-									<Button Margin="5" Visibility="{Binding CanRetry, Converter={StaticResource boolVisibilityConverter}, ConverterParameter=true}" Click="RetryButtonClicked">
-										<Button.Template>
-											<ControlTemplate>
-												<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Retry.png"/>
-											</ControlTemplate>
-										</Button.Template>
-									</Button>
-									<Button Margin="5" Click="DeleteButtonClicked">
-										<Button.Template>
-											<ControlTemplate>
-												<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Delete.png"/>
-											</ControlTemplate>
-										</Button.Template>
-									</Button>
-								</StackPanel>
+						</StackPanel>
+						<StackPanel Grid.Column="2" VerticalAlignment="Center">
+							<StackPanel Orientation="Horizontal">
+								<Button Margin="5" Visibility="{Binding CanRetry, Converter={StaticResource boolVisibilityConverter}, ConverterParameter=true}" Click="RetryButtonClicked">
+									<Button.Template>
+										<ControlTemplate>
+											<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Retry.png"/>
+										</ControlTemplate>
+									</Button.Template>
+								</Button>
+								<Button Margin="5" Click="DeleteButtonClicked">
+									<Button.Template>
+										<ControlTemplate>
+											<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Delete.png"/>
+										</ControlTemplate>
+									</Button.Template>
+								</Button>
 							</StackPanel>
-						</Grid>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
-		</Grid>
+						</StackPanel>
+					</Grid>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
 	</Grid>
 </Window>

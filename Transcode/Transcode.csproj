@@ -69,6 +69,7 @@
     <Compile Include="Model\BoolVisibilityConverter.cs" />
     <Compile Include="Extensions\PathExtension.cs" />
     <Compile Include="Model\TranscodeSettings.cs" />
+    <Compile Include="ViewModel\ItemViewModel.cs" />
     <Compile Include="View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>

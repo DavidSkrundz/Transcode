@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Transcode.Model;
+using Transcode.ViewModel;
 
 namespace Transcode.View {
 	public enum NewItemWindowResult {
@@ -15,14 +16,14 @@ namespace Transcode.View {
 	/// Interaction logic for NewItemWindow.xaml
 	/// </summary>
 	public partial class NewItemWindow : Window {
-		private Item item;
+		private ItemViewModel itemViewModel;
 		private NewItemWindowResult result = NewItemWindowResult.SkipFile;
 
-		public NewItemWindow(Item item) {
+		public NewItemWindow(ItemViewModel itemViewModel) {
 			InitializeComponent();
 
-			this.item = item ?? throw new ApplicationException("new NewItemWindow(): item is null");
-			this.DataContext = this.item;
+			this.itemViewModel = itemViewModel ?? throw new ApplicationException("new NewItemWindow(): itemViewModel is null");
+			this.DataContext = this.itemViewModel;
 		}
 
 		public new NewItemWindowResult ShowDialog() {
@@ -47,6 +48,7 @@ namespace Transcode.View {
 		}
 
 		private void AddButtonClicked(object sender, RoutedEventArgs eventArgs) {
+			if (this.itemViewModel.Item.PresetName.Length == 0) { return; }
 			this.result = NewItemWindowResult.Ok;
 			this.Close();
 		}

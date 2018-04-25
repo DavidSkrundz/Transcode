@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Transcode.Extensions;
 using Transcode.Model;
+using Transcode.ViewModel;
 
 namespace Transcode.View {
 	/// <summary>
@@ -27,10 +28,6 @@ namespace Transcode.View {
 			get => this.items;
 			set => this.SetField(ref this.items, value);
 		}
-		public ObservableCollection<string> Presets {
-			get => this.presets;
-			set => this.SetField(ref this.presets, value);
-		}
 		public string Progress {
 			get => this.progress;
 			set => this.SetField(ref this.progress, value);
@@ -39,7 +36,6 @@ namespace Transcode.View {
 		private Process process = null;
 		private bool isRunning = false;
 		private ObservableCollection<Item> items = new ObservableCollection<Item>();
-		private ObservableCollection<string> presets = new ObservableCollection<string>();
 		private string progress = "";
 
 		private TranscodeSettings settings = new TranscodeSettings();
@@ -55,7 +51,7 @@ namespace Transcode.View {
 
 		private void ReloadPresetsClicked(object sender, RoutedEventArgs eventArgs) {
 			if (sender != this.ReloadPresetsButton) { throw new ApplicationException("Invalid Button"); }
-			this.Presets.Clear();
+			this.settings.Presets.Clear();
 			if (this.settings.HandbrakePath.Length == 0) { return; }
 			var startInfo = new ProcessStartInfo() {
 				FileName = this.settings.HandbrakePath,
@@ -74,7 +70,7 @@ namespace Transcode.View {
 					} catch { return; }
 					if (line.Length == 0) { continue; }
 					if (line[0] == ' ' && shouldAdd) {
-						this.Presets.Add(line.Trim(' '));
+						this.settings.Presets.Add(line.Trim(' '));
 					} else {
 						shouldAdd = line == "User Presets/";
 					}
@@ -84,10 +80,6 @@ namespace Transcode.View {
 
 		private void OpenButtonClicked(object sender, RoutedEventArgs eventArgs) {
 			if (sender != this.OpenButton) { throw new ApplicationException("Invalid Button"); }
-			if (this.PresetComboBox.SelectedIndex < 0) {
-				// TODO: Show something about no preset selected
-				return;
-			}
 			if (this.settings.InputRootPath == "") {
 				// TODO: Show something about editing settings
 				return;
@@ -158,7 +150,11 @@ namespace Transcode.View {
 						OutputRelativePath = outputRelativePath,
 						OutputFileNumber = (outputNumber + 1).ToString()
 					};
-					var newItemWindow = new NewItemWindow(newItem) { Owner = this };
+					var itemVM = new ItemViewModel() {
+						Item = newItem,
+						Settings = this.settings
+					};
+					var newItemWindow = new NewItemWindow(itemVM) { Owner = this };
 					var response = newItemWindow.ShowDialog();
 					if (response == NewItemWindowResult.SkipFile) { continue; }
 					if (response == NewItemWindowResult.SkipFolder) { break; }
@@ -173,10 +169,6 @@ namespace Transcode.View {
 
 		private void StartStopButtonClicked(object sender, RoutedEventArgs eventArgs) {
 			if (sender != this.StartButton) { throw new ApplicationException("Invalid Button"); }
-			if (this.PresetComboBox.SelectedIndex < 0) {
-				// TODO: Show something about no preset selected
-				return;
-			}
 			if (this.IsRunning) {
 				this.PauseHandbrake();
 			} else {
@@ -213,7 +205,6 @@ namespace Transcode.View {
 		}
 
 		private void ProcessItem(Item item) {
-			if (this.PresetComboBox.SelectedIndex < 0) { throw new ApplicationException("No preset selected"); }
 			if (this.process != null) { throw new ApplicationException("Process not null"); }
 			if (item == null) { throw new ApplicationException("Item is null"); }
 			if (item.Status != ItemStatus.Pending) { throw new ApplicationException("Item should be pending"); }
@@ -228,7 +219,7 @@ namespace Transcode.View {
 			this.process = new Process {
 				StartInfo = new ProcessStartInfo() {
 					FileName = this.settings.HandbrakePath,
-					Arguments = string.Format("--preset-import-gui --preset \"{0}\" --input \"{1}\" --output \"{2}\"", this.Presets[this.PresetComboBox.SelectedIndex], item.InputPath, item.OutputPath),
+					Arguments = string.Format("--preset-import-gui --preset \"{0}\" --input \"{1}\" --output \"{2}\"", item.PresetName, item.InputPath, item.OutputPath),
 					UseShellExecute = false,
 					RedirectStandardOutput = true,
 					RedirectStandardError = true,

@@ -100,6 +100,11 @@ namespace Transcode.Model {
 		}
 		public bool CanRetry => this.Status == ItemStatus.Done || this.status == ItemStatus.Error;
 
+		public string PresetName {
+			get => this.presetName;
+			set => this.SetField(ref this.presetName, value);
+		}
+
 		private string inputBasePath = "";
 		private string inputRelativePath = "";
 		private string inputFileName = "";
@@ -109,7 +114,8 @@ namespace Transcode.Model {
 		private int outputFileNumber = -1;
 		private string outputFileName = "";
 		private string outputFileExtension = ".mp4";
-		private ItemStatus status;
+		private ItemStatus status = ItemStatus.Pending;
+		private string presetName = "";
 
 		private static Regex NotNumberRegex = new Regex("[^0-9]+");
 

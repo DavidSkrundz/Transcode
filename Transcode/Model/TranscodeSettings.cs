@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -39,9 +40,15 @@ namespace Transcode.Model {
 			}
 		}
 
+		public ObservableCollection<string> Presets =>
+				// TODO: Load presets on  background thread at some point
+				this.presets;
+
 		private string handbrakePath = "";
 		private string inputRootPath = "";
 		private string outputRootPath = "";
+
+		private ObservableCollection<string> presets = new ObservableCollection<string>();
 
 		// Boiler-plate for INotifyPropertyChanged
 		private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null) {
