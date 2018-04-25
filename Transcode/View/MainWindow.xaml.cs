@@ -131,6 +131,7 @@ namespace Transcode.View {
 		private bool ProcessFolder(string inputRelativePath, string inputBasePath, string outputBasePath) {
 			var outputRelativePath = inputRelativePath;
 			var outputNumber = 0;
+			var preset = "";
 			IEnumerable<string> files = null;
 			try {
 				files = Directory.EnumerateFileSystemEntries(Path.Combine(inputBasePath, inputRelativePath)).OrderBy(filename => filename);
@@ -148,7 +149,8 @@ namespace Transcode.View {
 						InputFileExtension = Path.GetExtension(inputFileName),
 						OutputBasePath = outputBasePath,
 						OutputRelativePath = outputRelativePath,
-						OutputFileNumber = (outputNumber + 1).ToString()
+						OutputFileNumber = (outputNumber + 1).ToString(),
+						PresetName = preset,
 					};
 					var itemVM = new ItemViewModel() {
 						Item = newItem,
@@ -162,6 +164,7 @@ namespace Transcode.View {
 					this.Items.Add(newItem);
 					outputRelativePath = newItem.OutputRelativePath;
 					outputNumber = int.Parse(newItem.OutputFileNumber);
+					preset = newItem.PresetName;
 				}
 			}
 			return true;
