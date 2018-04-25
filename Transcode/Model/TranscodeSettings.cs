@@ -13,7 +13,7 @@ namespace Transcode.Model {
 			get => this.handbrakePath;
 			set {
 				try {
-					if (value != null && !Path.IsPathRooted(value)) { throw new BindingException("Path is not absolute"); }
+					if (value == null || !Path.IsPathRooted(value)) { throw new BindingException("Path is not absolute"); }
 					this.SetField(ref this.handbrakePath, value);
 				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
@@ -23,7 +23,7 @@ namespace Transcode.Model {
 			get => this.inputRootPath;
 			set {
 				try {
-					if (value != null && !Path.IsPathRooted(value)) { throw new BindingException("Path is not absolute"); }
+					if (value == null || !Path.IsPathRooted(value)) { throw new BindingException("Path is not absolute"); }
 					this.SetField(ref this.inputRootPath, value);
 				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
@@ -33,7 +33,7 @@ namespace Transcode.Model {
 			get => this.outputRootPath;
 			set {
 				try {
-					if (value != null && !Path.IsPathRooted(value)) { throw new BindingException("Path is not absolute"); }
+					if (value == null || !Path.IsPathRooted(value)) { throw new BindingException("Path is not absolute"); }
 					this.SetField(ref this.outputRootPath, value);
 				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
