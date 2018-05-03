@@ -47,6 +47,7 @@ namespace Transcode.View {
 		private void SettingsButtonClicked(object sender, RoutedEventArgs eventArgs) {
 			var settingsWindow = new SettingsWindow(this.settings) { Owner = this };
 			settingsWindow.ShowDialog();
+			this.settings.SaveSettings();
 			this.settings.ReloadPresets();
 		}
 

@@ -6,7 +6,6 @@ Requires [HandbrakeCLI](https://handbrake.fr/downloads2.php)
 
 ### Things that can be added
 
-- Save configuration
 - Save the queue
 - Proper cleanup on application close
 - Reorder queue

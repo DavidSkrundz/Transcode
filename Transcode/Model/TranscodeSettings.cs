@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using Transcode.Exceptions;
 
 namespace Transcode.Model {
@@ -51,6 +52,10 @@ namespace Transcode.Model {
 
 		private ObservableCollection<string> presets = new ObservableCollection<string>();
 
+		public TranscodeSettings() {
+			this.LoadSettings();
+		}
+
 		public void ReloadPresets() {
 			this.Presets.Clear();
 			var startInfo = new ProcessStartInfo() {
@@ -76,6 +81,45 @@ namespace Transcode.Model {
 					}
 				}
 			}
+		}
+
+		private string configFileName = "transcode.config";
+		private string handbrakeName = "HandbrakePath";
+		private string inputRootName = "InputRootPath";
+		private string outputRootName = "OutputRootPath";
+		public void SaveSettings() {
+			var writer = new StringWriter();
+			writer.Write(this.handbrakeName);
+			writer.Write("=");
+			writer.WriteLine(this.HandbrakePath);
+			writer.Write(this.inputRootName);
+			writer.Write("=");
+			writer.WriteLine(this.InputRootPath);
+			writer.Write(this.outputRootName);
+			writer.Write("=");
+			writer.WriteLine(this.OutputRootPath);
+			File.WriteAllText(this.configFileName, writer.ToString());
+		}
+
+		private void LoadSettings() {
+			try {
+				using (var file = new StreamReader(this.configFileName)) {
+					string line;
+					char[] separator = { '=' };
+					while ((line = file.ReadLine()) != null) {
+						var parts = line.Split(separator, 2);
+						if (parts.Length != 2) { MessageBox.Show("Bad config file"); }
+						if (parts[0] == this.handbrakeName) {
+							this.handbrakePath = parts[1];
+							this.ReloadPresets();
+						} else if (parts[0] == this.inputRootName) {
+							this.inputRootPath = parts[1];
+						} else if (parts[0] == this.outputRootName) {
+							this.outputRootPath = parts[1];
+						}
+					}
+				}
+			} catch { }
 		}
 
 		// Boiler-plate for INotifyPropertyChanged
