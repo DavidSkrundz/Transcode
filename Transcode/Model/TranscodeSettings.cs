@@ -42,9 +42,7 @@ namespace Transcode.Model {
 			}
 		}
 
-		public ObservableCollection<string> Presets =>
-				// TODO: Load presets on  background thread at some point
-				this.presets;
+		public ObservableCollection<string> Presets => this.presets;
 
 		private string handbrakePath = "";
 		private string inputRootPath = "";
