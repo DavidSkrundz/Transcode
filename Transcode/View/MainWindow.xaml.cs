@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,7 +9,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using Transcode.Extensions;
 using Transcode.Model;
 using Transcode.ViewModel;
@@ -47,35 +47,7 @@ namespace Transcode.View {
 		private void SettingsButtonClicked(object sender, RoutedEventArgs eventArgs) {
 			var settingsWindow = new SettingsWindow(this.settings) { Owner = this };
 			settingsWindow.ShowDialog();
-		}
-
-		private void ReloadPresetsClicked(object sender, RoutedEventArgs eventArgs) {
-			if (sender != this.ReloadPresetsButton) { throw new ApplicationException("Invalid Button"); }
-			this.settings.Presets.Clear();
-			if (this.settings.HandbrakePath.Length == 0) { return; }
-			var startInfo = new ProcessStartInfo() {
-				FileName = this.settings.HandbrakePath,
-				Arguments = "--preset-import-gui --preset-list",
-				UseShellExecute = false,
-				RedirectStandardOutput = true,
-				RedirectStandardError = true,
-				CreateNoWindow = true,
-			};
-			using (var handbrake = Process.Start(startInfo)) {
-				var shouldAdd = false;
-				while (!handbrake.StandardError.EndOfStream) {
-					string line = null;
-					try {
-						line = handbrake.StandardError.ReadLine();
-					} catch { return; }
-					if (line.Length == 0) { continue; }
-					if (line[0] == ' ' && shouldAdd) {
-						this.settings.Presets.Add(line.Trim(' '));
-					} else {
-						shouldAdd = line == "User Presets/";
-					}
-				}
-			}
+			this.settings.ReloadPresets();
 		}
 
 		private void OpenButtonClicked(object sender, RoutedEventArgs eventArgs) {

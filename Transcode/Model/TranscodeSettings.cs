@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using Transcode.Exceptions;
@@ -49,6 +50,33 @@ namespace Transcode.Model {
 		private string outputRootPath = "";
 
 		private ObservableCollection<string> presets = new ObservableCollection<string>();
+
+		public void ReloadPresets() {
+			this.Presets.Clear();
+			var startInfo = new ProcessStartInfo() {
+				FileName = this.HandbrakePath,
+				Arguments = "--preset-import-gui --preset-list",
+				UseShellExecute = false,
+				RedirectStandardOutput = true,
+				RedirectStandardError = true,
+				CreateNoWindow = true,
+			};
+			using (var handbrake = Process.Start(startInfo)) {
+				var shouldAdd = false;
+				while (!handbrake.StandardError.EndOfStream) {
+					string line = null;
+					try {
+						line = handbrake.StandardError.ReadLine();
+					} catch { return; }
+					if (line.Length == 0) { continue; }
+					if (line[0] == ' ' && shouldAdd) {
+						this.Presets.Add(line.Trim(' '));
+					} else {
+						shouldAdd = line == "User Presets/";
+					}
+				}
+			}
+		}
 
 		// Boiler-plate for INotifyPropertyChanged
 		private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null) {

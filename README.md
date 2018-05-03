@@ -10,6 +10,5 @@ Requires [HandbrakeCLI](https://handbrake.fr/downloads2.php)
 - Save the queue
 - Proper cleanup on application close
 - Reorder queue
-- Edit item
 - Have a sub and no-sub preset and use the no-sub if VODSUB or mp4 incompatible subs are detected
 - Don't present windows as dialogs to allow queue management while adding items

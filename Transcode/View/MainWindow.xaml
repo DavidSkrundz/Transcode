@@ -61,13 +61,6 @@
 						</ControlTemplate>
 					</Button.Template>
 				</Button>
-				<Button Name="ReloadPresetsButton" Margin="5" Click="ReloadPresetsClicked">
-					<Button.Template>
-						<ControlTemplate>
-							<Image VerticalAlignment="Center" SnapsToDevicePixels="True" Source="/Images/Retry.png"/>
-						</ControlTemplate>
-					</Button.Template>
-				</Button>
 			</StackPanel>
 		</Grid>
 		<ListView Grid.Row="1" HorizontalContentAlignment="Stretch" Margin="5,0,5,5" ItemsSource="{Binding Items, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
