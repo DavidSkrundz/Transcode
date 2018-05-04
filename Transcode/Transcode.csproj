@@ -70,9 +70,16 @@
     <Compile Include="Extensions\PathExtension.cs" />
     <Compile Include="Model\TranscodeSettings.cs" />
     <Compile Include="ViewModel\ItemViewModel.cs" />
+    <Compile Include="View\EditItemWindow.xaml.cs">
+      <DependentUpon>EditItemWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\EditItemWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
