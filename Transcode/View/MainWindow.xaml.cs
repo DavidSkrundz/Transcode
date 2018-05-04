@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Transcode.Extensions;
 using Transcode.Model;
 using Transcode.ViewModel;
@@ -234,6 +235,18 @@ namespace Transcode.View {
 			field = value;
 			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 			return true;
+		}
+
+		private void ItemDoubleClicked(object sender, MouseButtonEventArgs e) {
+			e.Handled = true;
+			var listView = (ListView)sender;
+			if (listView.SelectedItem == null) { return; }
+			var itemVM = new ItemViewModel() {
+				Item = (Item)listView.SelectedItem,
+				Settings = this.settings
+			};
+			var editItemWindow = new EditItemWindow(itemVM) { Owner = this };
+			editItemWindow.ShowDialog();
 		}
 	}
 }

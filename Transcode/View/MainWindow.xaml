@@ -13,6 +13,7 @@
 		<local:BoolVisibilityConverter x:Key="boolVisibilityConverter" />
 		<local:ItemStatusConverter x:Key="itemStatusConverter"/>
 	</Window.Resources>
+	
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -63,7 +64,7 @@
 				</Button>
 			</StackPanel>
 		</Grid>
-		<ListView Grid.Row="1" HorizontalContentAlignment="Stretch" Margin="5,0,5,5" ItemsSource="{Binding Items, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+		<ListView Grid.Row="1" HorizontalContentAlignment="Stretch" Margin="5,0,5,5" ItemsSource="{Binding Items, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" MouseDoubleClick="ItemDoubleClicked">
 			<ListView.ItemTemplate>
 				<DataTemplate>
 					<Grid>
