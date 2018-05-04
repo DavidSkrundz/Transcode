@@ -22,6 +22,7 @@ namespace Transcode.Model {
 				try {
 					if (value == null || !Path.IsPathRooted(value)) { throw new BindingException("Path is not absolute"); }
 					this.SetField(ref this.inputBasePath, value);
+					this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InputPath"));
 				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
 		}
@@ -31,6 +32,7 @@ namespace Transcode.Model {
 				try {
 					if (value == null || Path.IsPathRooted(value)) { throw new BindingException("Relative path cannot be absolute"); }
 					this.SetField(ref this.inputRelativePath, value);
+					this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InputPath"));
 				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
 		}
@@ -40,6 +42,7 @@ namespace Transcode.Model {
 				try {
 					if (value == null || !PathExtension.IsValidFileName(value)) { throw new BindingException("Illegal characters in name."); }
 					this.SetField(ref this.inputFileName, value);
+					this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InputPath"));
 				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
 		}
@@ -49,6 +52,7 @@ namespace Transcode.Model {
 				try {
 					if (value == null || !PathExtension.IsValidFileName(value)) { throw new BindingException("Illegal characters in name."); }
 					this.SetField(ref this.inputFileExtension, value);
+					this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InputPath"));
 				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
 		}
@@ -59,6 +63,7 @@ namespace Transcode.Model {
 				try {
 					if (value == null || !Path.IsPathRooted(value)) { throw new BindingException("Path is not absolute"); }
 					this.SetField(ref this.outputBasePath, value);
+					this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OutputPath"));
 				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
 		}
@@ -68,6 +73,7 @@ namespace Transcode.Model {
 				try {
 					if (value == null || Path.IsPathRooted(value)) { throw new BindingException("Relative path cannot be absolute"); }
 					this.SetField(ref this.outputRelativePath, value);
+					this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OutputPath"));
 				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
 		}
@@ -78,6 +84,7 @@ namespace Transcode.Model {
 					if (value == null) { throw new BindingException("Number cannot be null"); }
 					if (NotNumberRegex.IsMatch(value)) { throw new BindingException("Only digits are allowed"); }
 					this.SetField(ref this.outputFileNumber, value.Length == 0 ? -1 : int.Parse(value));
+					this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OutputPath"));
 				} catch (OverflowException e) { throw new BindingException(e.Message); }
 			}
 		}
@@ -87,6 +94,7 @@ namespace Transcode.Model {
 				try {
 					if (value == null || !PathExtension.IsValidFileName(value)) { throw new BindingException("Illegal characters in name."); }
 					this.SetField(ref this.outputFileName, value);
+					this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OutputPath"));
 				} catch (ArgumentException e) { throw new BindingException(e.Message); }
 			}
 		}
